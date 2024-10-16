@@ -108,6 +108,7 @@ public strictfp class RobotPlayer {
                         rc.build(TrapType.EXPLOSIVE, prevLoc);
                     // We can also move our code into different methods or classes to better organize it!
                     updateEnemyRobots(rc);
+                    healNearbyFriend(rc);
                 }
 
             } catch (GameActionException e) {
@@ -148,6 +149,18 @@ public strictfp class RobotPlayer {
             if (rc.canWriteSharedArray(0, enemyRobots.length)){
                 rc.writeSharedArray(0, enemyRobots.length);
                 int numEnemies = rc.readSharedArray(0);
+            }
+        }
+    }
+
+    public static void healNearbyFriend (RobotController rc) throws GameActionException {
+        RobotInfo[] nearbyFriends = rc.senseNearbyRobots(2, rc.getTeam());
+        for (RobotInfo friend : nearbyFriends) {
+            if (friend.health < 1000 && rc.canHeal(friend.getLocation())) {
+                rc.heal(friend.getLocation());
+                System.out.println("Healed a friendly unit!");
+                rc.setIndicatorString("Healing: " + friend.getLocation());
+                break; // Heal only one unit per turn
             }
         }
     }
