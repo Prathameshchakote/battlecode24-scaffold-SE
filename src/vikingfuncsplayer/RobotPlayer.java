@@ -53,8 +53,10 @@ public strictfp class RobotPlayer {
                             HealerSetup.runSetup(rc);
                         }
                     } else {
+                        /* Attack Duck */
                         if(type == 0 || type == 1){
                             Setup.runSetup(rc);
+                        /* healer duck */
                         } else{
                             Setup.runSetup(rc);
                         }
