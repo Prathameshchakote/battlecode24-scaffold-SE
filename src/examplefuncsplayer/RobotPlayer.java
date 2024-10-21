@@ -30,7 +30,7 @@ public strictfp class RobotPlayer {
      * we get the same sequence of numbers every time this code is run. This is very useful for debugging!
      */
     static final Random rng = new Random(6147);
-
+    public static Random random = null;
     /** Array containing all the possible movement directions. */
     static final Direction[] directions = {
         Direction.NORTH,
@@ -71,6 +71,8 @@ public strictfp class RobotPlayer {
             try {
                 // Make sure you spawn your robot in before you attempt to take any actions!
                 // Robots not spawned in do not have vision of any tiles and cannot perform any actions.
+                if(random == null) random = new Random(rc.getID());
+
                 if (!rc.isSpawned()){
                     MapLocation[] spawnLocs = rc.getAllySpawnLocations();
                     // Pick a random spawn location to attempt spawning in.
@@ -78,6 +80,8 @@ public strictfp class RobotPlayer {
                     if (rc.canSpawn(randomLoc)) rc.spawn(randomLoc);
                 }
                 else{
+                    int round = rc.getRoundNum();
+                    if(round < GameConstants.SETUP_ROUNDS) Setup.runSetup(rc);
                     if (rc.canPickupFlag(rc.getLocation())){
                         rc.pickupFlag(rc.getLocation());
                         rc.setIndicatorString("Holding a flag!");
@@ -136,6 +140,7 @@ public strictfp class RobotPlayer {
                         rc.build(TrapType.EXPLOSIVE, prevLoc);
                     // We can also move our code into different methods or classes to better organize it!
                     updateEnemyRobots(rc);
+                    healNearbyFriend(rc);
                 }
 
             } catch (GameActionException e) {
@@ -176,6 +181,18 @@ public strictfp class RobotPlayer {
             if (rc.canWriteSharedArray(0, enemyRobots.length)){
                 rc.writeSharedArray(0, enemyRobots.length);
                 int numEnemies = rc.readSharedArray(0);
+            }
+        }
+    }
+
+    public static void healNearbyFriend (RobotController rc) throws GameActionException {
+        RobotInfo[] nearbyFriends = rc.senseNearbyRobots(2, rc.getTeam());
+        for (RobotInfo friend : nearbyFriends) {
+            if (friend.health < 1000 && rc.canHeal(friend.getLocation())) {
+                rc.heal(friend.getLocation());
+                System.out.println("Healed a friendly unit!");
+                rc.setIndicatorString("Healing: " + friend.getLocation());
+                break; // Heal only one unit per turn
             }
         }
     }
