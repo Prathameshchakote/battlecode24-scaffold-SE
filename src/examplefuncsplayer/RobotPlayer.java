@@ -94,8 +94,36 @@ public strictfp class RobotPlayer {
                     // Move and attack randomly if no objective.
                     Direction dir = directions[rng.nextInt(directions.length)];
                     MapLocation nextLoc = rc.getLocation().add(dir);
-                    if (rc.canMove(dir)){
-                        rc.move(dir);
+                    //Check for if we're in the set up phase
+                    if (rc.getRoundNum() <= GameConstants.SETUP_ROUNDS)
+                    {  /* HERE WILL BE CODE FOR ATTACK DUCKS (ID % 3 = 0) */ 
+                        //check for nearby crumbs
+                        MapLocation[] crumbMap = rc.senseNearbyCrumbs(-1);
+                        //If there are crumbs, head to the nearest one
+                        if(crumbMap.length != 0)
+                        { 
+                            MapLocation firstCrumb = crumbMap[0];
+                            int checker = 1;
+                            //Check is crumb is available to be picked up through checking if the crumb location is fillable. 
+                            while(rc.canFill(firstCrumb))
+                            {
+                                if(crumbMap.length >= checker + 1)
+                                firstCrumb = crumbMap[checker];
+                                checker++;
+                            }
+                            //If crumb is available, head to it.
+                            if(!rc.canFill(firstCrumb))
+                            {
+                                dir = rc.getLocation().directionTo(firstCrumb);
+                                    if (rc.canMove(dir)){
+                                        rc.move(dir);
+                                    }
+                            }
+                        }
+                        //otherwise, move randomly until one is found.
+                                if (rc.canMove(dir)){
+                                    rc.move(dir);
+                                }
                     }
                     else if (rc.canAttack(nextLoc)){
                         rc.attack(nextLoc);
