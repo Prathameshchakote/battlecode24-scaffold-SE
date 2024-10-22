@@ -33,6 +33,8 @@ public strictfp class RobotPlayer {
         int round = 0;
         while(true){
             try{
+                /* sets up random */
+                if(random == null) random = new Random(rc.getID());
                 /* testing to see if duck has been spawned */
                 if(spawned == 0){
                     trySpawn(rc);
@@ -55,10 +57,10 @@ public strictfp class RobotPlayer {
                     } else {
                         /* Attack Duck */
                         if(type == 0 || type == 1){
-                            Setup.runSetup(rc);
+                            AttackSetup.runSetup(rc);
                         /* healer duck */
                         } else{
-                            Setup.runSetup(rc);
+                            HealerSetup.runSetup(rc);
                         }
                     }
                     

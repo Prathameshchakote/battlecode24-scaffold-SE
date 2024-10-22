@@ -21,7 +21,7 @@ public class AttackSetup {
         Direction dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
         MapLocation nextLoc = rc.getLocation().add(dir);
         //Check for if we're in the set up phase
-        if (rc.getRoundNum() <= GameConstants.SETUP_ROUNDS)
+        if (rc.getRoundNum() <= GameConstants.SETUP_ROUNDS || rc.getRoundNum() <= 2000)
         {  /* HERE WILL BE CODE FOR ATTACK DUCKS (ID % 3 = 0) */ 
             //check for nearby crumbs
             MapLocation[] crumbMap = rc.senseNearbyCrumbs(-1);
