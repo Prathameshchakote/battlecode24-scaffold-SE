@@ -30,7 +30,8 @@ public class AttackSetup {
             { 
                 MapLocation firstCrumb = crumbMap[0];
                 int checker = 1;
-                //Check is crumb is available to be picked up through checking if the crumb location is fillable. 
+                //Check is crumb is available to be picked up through checking if the crumb location is fillable.
+                if(crumbMap.length>= 1) 
                 while(rc.canFill(firstCrumb))
                 {
                     if(crumbMap.length >= checker + 1)
@@ -47,6 +48,8 @@ public class AttackSetup {
                 }
             }
             //otherwise, move randomly until one is found.
+
+            dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
                     if (rc.canMove(dir)){
                         rc.move(dir);
                     }
