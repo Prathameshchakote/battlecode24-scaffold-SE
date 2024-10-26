@@ -61,11 +61,34 @@ public class AttackSetup {
         
         //Intital plans are to search for enemy flags, take it, and bring it home, attacking any nearby ducks and targetting any ducks that take our flag. 
 
-        //start moving in a random direction
-        Direction dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
-        MapLocation nextLoc = rc.getLocation().add(dir);
-        if (rc.canMove(dir)){
-            rc.move(dir);
+        Direction dir;
+        MapLocation nextLoc;
+
+        //What team are we?
+        Team ourTeam = rc.getTeam();
+        //if theres a flag, go towards it ASAP
+        FlagInfo flagSense[] = rc.senseNearbyFlags(-1,Team.opponent());
+        int counter  = 0; 
+        if(flagSense.length >= counter)
+        {
+            if(!flagSense[counter].isPickedUp())
+                dir = rc.getlocation().directionTo(flagSense[counter].getLocation());
+            else {
+                counter++;
+            }
+            if(rc.canMove(dir)){
+                 rc.move(dir);
+            }
+            
+        }
+        FlagInfo defenseSense[] = rc.senseNearbyFlags(4,ourTeam);
+        int defensecounter = 0;
+        //if theres a person carrying our flag, target carrier.
+        if(defenseSense.length>=defensecounter){
+            if(defenseSense[counter].isPickedUp())
+                dir = rc.getlocation().directionTo(defenseSense[counter].getLocation());
+            if(rc.canMove(dir))
+                rc.move(dir);
         }
         //if an enemy is in our way, attack them.
         nextLoc = rc.getLocation().add(dir);
@@ -73,28 +96,12 @@ public class AttackSetup {
             rc.attack(nextLoc);
             System.out.println("Take that! Damaged an enemy that was in our way!");
         }
-        //What team are we?
-        Team ourTeam = rc.getTeam();
-        //if theres a flag, go towards it ASAP
-        FlagInfo flagSense[] = rc.senseNearbyFlags(-1,Team.opponent());
-        int counter  = 0; 
-        if(flagSense.length >= 0)
-        {
-            if(!flagSense[counter].isPickedUp())
-                dir = rc.getlocation().directionTo(flagSense[counter].getLocation());
-            if(rc.canMove(dir)){
-                 rc.move(dir);
-            }
-            
-        }
-        //if theres a person carrying our flag, target carrier.
-        if(){}
-
           //otherwise, move randomly until one is found.
         dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
         if (rc.canMove(dir)){
                 rc.move(dir);
             }
+
     }
      
 }
