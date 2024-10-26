@@ -46,6 +46,11 @@ public class AttackSetup {
                             rc.move(dir);
                         }
                 }
+                  //otherwise, move randomly until one is found.
+                dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
+                if (rc.canMove(dir)){
+                        rc.move(dir);
+                    }
             }
           
         }
