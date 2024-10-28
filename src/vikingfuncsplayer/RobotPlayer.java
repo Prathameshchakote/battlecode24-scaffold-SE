@@ -45,7 +45,7 @@ public strictfp class RobotPlayer {
                             MapLocation flagLoc = flag.getLocation();
                             if(rc.canPickupFlag(flagLoc)){
                                 type = 4;
-                                System.out.println("I am a bulder.");
+                                // System.out.println("I am a bulder.");
                             }
                             else {
                                 type = rc.getID() % 3;
@@ -90,10 +90,21 @@ public strictfp class RobotPlayer {
 
     private static void trySpawn(RobotController rc) throws GameActionException {
         MapLocation[] locations = rc.getAllySpawnLocations();
-        for(MapLocation loc : locations) {
-            if(rc.canSpawn(loc)) {
-                rc.spawn(loc);
-                break;
+        int a = random.nextInt(2);
+        if(a == 1){
+            for(MapLocation loc : locations) {
+                if(rc.canSpawn(loc)) {
+                    rc.spawn(loc);
+                    break;
+                }
+            }
+        }
+        else{
+            for(int x=locations.length-1; x >=0; x--) {
+                if(rc.canSpawn(locations[x])) {
+                    rc.spawn(locations[x]);
+                    break;
+                }
             }
         }
     }
