@@ -38,9 +38,19 @@ public strictfp class RobotPlayer {
                 /* testing to see if duck has been spawned */
                 if(spawned == 0){
                     trySpawn(rc);
-                    if(rc.isSpawned()) {
+                    if(rc.isSpawned() ) {
                         spawned = 1;
-                        type = rc.getID() % 3;
+                        FlagInfo[] flags = rc.senseNearbyFlags(-1);
+                        for(FlagInfo flag : flags) {
+                            MapLocation flagLoc = flag.getLocation();
+                            if(rc.canPickupFlag(flagLoc)){
+                                type = 4;
+                                System.out.println("I am a bulder.");
+                            }
+                            else {
+                                type = rc.getID() % 3;
+                            }
+                        }
                     }
                 }
                 /* logic for the spawned duck based on type and round */
@@ -49,12 +59,19 @@ public strictfp class RobotPlayer {
                     round = rc.getRoundNum();
                     
                     if(round <= GameConstants.SETUP_ROUNDS) {
+                        if(type == 4){
+                            BuilderSetup.runSetup(rc);
+                        }
                         if(type == 0 || type == 1){
                             AttackSetup.runSetup(rc);
                         } else{
                             HealerSetup.runSetup(rc);
                         }
                     } else {
+                        /* Builder Duck */
+                        if(type == 4){
+                            BuilderSetup.runSetup(rc);
+                        }
                         /* Attack Duck */
                         if(type == 0 || type == 1){
                             AttackSetup.runSetup(rc);
