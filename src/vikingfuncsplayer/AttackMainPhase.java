@@ -46,9 +46,9 @@ public class AttackMainPhase {
 
         }
         nextLoc = rc.getLocation().add(dir);
-        if(rc.canPickupFlag(nextLoc))
+        if(rc.canPickupFlag(rc.getLocation()))
         {
-            rc.pickupFlag(nextLoc);
+            rc.pickupFlag(rc.getLocation());
         }
         //if we have the flag, its time to GO HOME
         if (rc.hasFlag() && rc.getRoundNum() >= GameConstants.SETUP_ROUNDS){
