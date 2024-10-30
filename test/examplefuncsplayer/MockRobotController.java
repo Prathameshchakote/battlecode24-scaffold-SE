@@ -241,4 +241,42 @@ public  class MockRobotController implements RobotController {
         return false;
     }
 
-    
+    @Override
+    public void dig(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canFill(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void fill(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canBuild(TrapType building, MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void build(TrapType building, MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canAttack(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void attack(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canHeal(MapLocation loc) {
+        return false;
+    }
