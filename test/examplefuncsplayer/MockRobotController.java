@@ -38,3 +38,43 @@ public  class MockRobotController implements RobotController {
     public Team getTeam() {
         return null;
     }
+
+    @Override
+    public MapLocation getLocation() {
+        return null;
+    }
+
+    @Override
+    public int getHealth() {
+        return 0;
+    }
+
+    @Override
+    public int getExperience(SkillType skill) {
+        return 0;
+    }
+
+    @Override
+    public int getLevel(SkillType skill) {
+        return 0;
+    }
+
+    @Override
+    public int getCrumbs() {
+        return 0;
+    }
+
+    @Override
+    public boolean onTheMap(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public boolean canSenseLocation(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public boolean isLocationOccupied(MapLocation loc) throws GameActionException {
+        return false;
+    }
