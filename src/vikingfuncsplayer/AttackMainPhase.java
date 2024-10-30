@@ -27,7 +27,7 @@ public class AttackMainPhase {
         //if theres a flag, go towards it ASAP
         FlagInfo flagSense[] = rc.senseNearbyFlags(-1,ourTeam.opponent());
         int counter  = 0; 
-        if(flagSense.length >= counter)
+        if(flagSense.length > counter)
         {
             if(!flagSense[counter].isPickedUp()){
                 dir = rc.getLocation().directionTo(flagSense[counter].getLocation());
@@ -40,13 +40,25 @@ public class AttackMainPhase {
         FlagInfo defenseSense[] = rc.senseNearbyFlags(4,ourTeam);
         int defensecounter = 0;
         //if theres a person carrying our flag, target carrier.
-        if(defenseSense.length>=defensecounter){
+        if(defenseSense.length> defensecounter){
             if(defenseSense[counter].isPickedUp())
                 dir = rc.getLocation().directionTo(defenseSense[counter].getLocation());
 
         }
-        //if an enemy is in our way, attack them.
         nextLoc = rc.getLocation().add(dir);
+        if(rc.canPickupFlag(nextLoc))
+        {
+            rc.pickupFlag(nextLoc);
+        }
+        //if we have the flag, its time to GO HOME
+        if (rc.hasFlag() && rc.getRoundNum() >= GameConstants.SETUP_ROUNDS){
+            MapLocation[] spawnLocs = rc.getAllySpawnLocations();
+            MapLocation firstLoc = spawnLocs[0];
+            dir = rc.getLocation().directionTo(firstLoc);
+
+        }
+        //if an enemy is in our way, attack them.
+        
         if (rc.canAttack(nextLoc)){
             rc.attack(nextLoc);
             System.out.println("Take that! Damaged an enemy that was in our way!");
