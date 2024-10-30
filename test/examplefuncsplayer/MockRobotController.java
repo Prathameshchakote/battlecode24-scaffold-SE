@@ -160,3 +160,42 @@ public  class MockRobotController implements RobotController {
     public FlagInfo[] senseNearbyFlags(int radiusSquared) throws GameActionException {
         return new FlagInfo[0];
     }
+    @Override
+    public FlagInfo[] senseNearbyFlags(int radiusSquared, Team team) throws GameActionException {
+        return new FlagInfo[0];
+    }
+
+    @Override
+    public MapLocation[] senseBroadcastFlagLocations() {
+        return new MapLocation[0];
+    }
+
+    @Override
+    public boolean senseLegalStartingFlagPlacement(MapLocation loc) throws GameActionException {
+        return false;
+    }
+
+    @Override
+    public MapLocation adjacentLocation(Direction dir) {
+        return null;
+    }
+
+    @Override
+    public MapLocation[] getAllLocationsWithinRadiusSquared(MapLocation center, int radiusSquared) throws GameActionException {
+        return new MapLocation[0];
+    }
+
+    @Override
+    public boolean isSpawned() {
+        return false;
+    }
+
+    @Override
+    public boolean isActionReady() {
+        return false;
+    }
+
+    @Override
+    public int getActionCooldownTurns() {
+        return 0;
+    }
