@@ -61,7 +61,7 @@ public class AttackSetup {
         
         //Intital plans are to search for enemy flags, take it, and bring it home, attacking any nearby ducks and targetting any ducks that take our flag. 
 
-        Direction dir;
+        Direction dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
         MapLocation nextLoc;
 
         //What team are we?
@@ -76,9 +76,6 @@ public class AttackSetup {
             else {
                 counter++;
             }
-            if(rc.canMove(dir)){
-                 rc.move(dir);
-            }
             
         }
         FlagInfo defenseSense[] = rc.senseNearbyFlags(4,ourTeam);
@@ -87,8 +84,7 @@ public class AttackSetup {
         if(defenseSense.length>=defensecounter){
             if(defenseSense[counter].isPickedUp())
                 dir = rc.getlocation().directionTo(defenseSense[counter].getLocation());
-            if(rc.canMove(dir))
-                rc.move(dir);
+
         }
         //if an enemy is in our way, attack them.
         nextLoc = rc.getLocation().add(dir);
@@ -97,7 +93,7 @@ public class AttackSetup {
             System.out.println("Take that! Damaged an enemy that was in our way!");
         }
           //otherwise, move randomly until one is found.
-        dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
+        
         if (rc.canMove(dir)){
                 rc.move(dir);
             }
