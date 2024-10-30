@@ -57,7 +57,7 @@ public strictfp class RobotPlayer {
                     } else {
                         /* Attack Duck */
                         if(type == 0 || type == 1){
-                            AttackSetup.runSetup(rc);
+                            AttackMainPhase.attackPhase(rc);
                         /* healer duck */
                         } else{
                             HealerSetup.runSetup(rc);
