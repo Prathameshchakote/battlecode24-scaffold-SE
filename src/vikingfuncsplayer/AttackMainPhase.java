@@ -5,15 +5,17 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
+import battlecode.common.Team;
+import battlecode.common.FlagInfo;
 import java.util.Random;
 
 
 
-public static void AttackMainPhase {
+public class AttackMainPhase {
 
         public static void attackPhase(RobotController rc) throws GameActionException
     {  
-      //if the set up phase is over, its time to push to the opponents side.
+        //if the set up phase is over, its time to push to the opponents side.
         
         //Intital plans are to search for enemy flags, take it, and bring it home, attacking any nearby ducks and targetting any ducks that take our flag. 
 
@@ -23,12 +25,13 @@ public static void AttackMainPhase {
         //What team are we?
         Team ourTeam = rc.getTeam();
         //if theres a flag, go towards it ASAP
-        FlagInfo flagSense[] = rc.senseNearbyFlags(-1,Team.opponent());
+        FlagInfo flagSense[] = rc.senseNearbyFlags(-1,ourTeam.opponent());
         int counter  = 0; 
         if(flagSense.length >= counter)
         {
-            if(!flagSense[counter].isPickedUp())
-                dir = rc.getlocation().directionTo(flagSense[counter].getLocation());
+            if(!flagSense[counter].isPickedUp()){
+                dir = rc.getLocation().directionTo(flagSense[counter].getLocation());
+            }
             else {
                 counter++;
             }
@@ -39,7 +42,7 @@ public static void AttackMainPhase {
         //if theres a person carrying our flag, target carrier.
         if(defenseSense.length>=defensecounter){
             if(defenseSense[counter].isPickedUp())
-                dir = rc.getlocation().directionTo(defenseSense[counter].getLocation());
+                dir = rc.getLocation().directionTo(defenseSense[counter].getLocation());
 
         }
         //if an enemy is in our way, attack them.

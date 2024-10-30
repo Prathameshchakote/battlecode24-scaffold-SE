@@ -32,7 +32,7 @@ public class AttackSetup {
                 int checker = 1;
                 //Check is crumb is available to be picked up through checking if the crumb location is fillable.
                 if(crumbMap.length>= 1) 
-                while(rc.canFill(firstCrumb))
+                if(rc.canFill(firstCrumb))
                 {
                     if(crumbMap.length >= checker + 1)
                     firstCrumb = crumbMap[checker];
@@ -55,6 +55,7 @@ public class AttackSetup {
           
         }
     }
+    /* 
     public static void attackPhase(RobotController rc) throws GameActionException
     {  
       //if the set up phase is over, its time to push to the opponents side.
@@ -102,5 +103,5 @@ public class AttackSetup {
         }
 
     }
-     
+     */
 }
