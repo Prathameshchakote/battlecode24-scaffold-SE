@@ -280,3 +280,79 @@ public  class MockRobotController implements RobotController {
     public boolean canHeal(MapLocation loc) {
         return false;
     }
+
+    @Override
+    public void heal(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean hasFlag() {
+        return false;
+    }
+
+    @Override
+    public boolean canPickupFlag(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void pickupFlag(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canDropFlag(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void dropFlag(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public int readSharedArray(int index) throws GameActionException {
+        return 0;
+    }
+
+    @Override
+    public boolean canWriteSharedArray(int index, int value) {
+        return false;
+    }
+
+    @Override
+    public void writeSharedArray(int index, int value) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canBuyGlobal(GlobalUpgrade ug) {
+        return false;
+    }
+
+    @Override
+    public void buyGlobal(GlobalUpgrade ug) throws GameActionException {
+
+    }
+
+    @Override
+    public void resign() {
+
+    }
+
+    @Override
+    public void setIndicatorString(String string) {
+
+    }
+
+    @Override
+    public void setIndicatorDot(MapLocation loc, int red, int green, int blue) {
+
+    }
+
+    @Override
+    public void setIndicatorLine(MapLocation startLoc, MapLocation endLoc, int red, int green, int blue) {
+
+    }
+}
