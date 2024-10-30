@@ -92,11 +92,14 @@ public class AttackSetup {
             rc.attack(nextLoc);
             System.out.println("Take that! Damaged an enemy that was in our way!");
         }
-          //otherwise, move randomly until one is found.
+          //otherwise, move randomly until one is found.First filling if needed.
+        if(rc.canFill(nextLoc)){
+            rc.fill(nextLoc);
+        }
         
         if (rc.canMove(dir)){
                 rc.move(dir);
-            }
+        }
 
     }
      
