@@ -4,7 +4,7 @@ import battlecode.common.*;
 
 public class BuilderSetup {
 
-    private static final int EXPLORE_ROUNDS = 150;
+    private static final int EXPLORE_ROUNDS = 100;
 
     public static void runSetup(RobotController rc) throws GameActionException {
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
@@ -21,6 +21,11 @@ public class BuilderSetup {
         else {
             //try to place flag if it is far enough away from other flags
             if(rc.senseLegalStartingFlagPlacement(rc.getLocation())) {
+                if(RobotPlayer.drop == 0){
+                    RobotPlayer.drop = 1;
+                    System.out.println(rc.getRoundNum());
+                    System.out.println(rc.getLocation());
+                }
                 if(rc.canDropFlag(rc.getLocation())) rc.dropFlag(rc.getLocation());
             }
             //move towards flags and place defenses around them

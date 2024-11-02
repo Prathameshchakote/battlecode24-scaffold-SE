@@ -12,8 +12,9 @@ import java.util.Set;
 
 public strictfp class RobotPlayer {
 
-    static final Random rng = new Random(6147);
+    static final Random rng = new Random();
     public static Random random = null;
+    public static int drop = 0;
 
     static final Direction[] directions = {
         Direction.NORTH,
@@ -70,7 +71,7 @@ public strictfp class RobotPlayer {
                     } else {
                         /* Builder Duck */
                         if(type == 4){
-                            BuilderSetup.runSetup(rc);
+                            BuilderMain.runMain(rc);
                         }
                         /* Attack Duck */
                         if(type == 0 || type == 1){
