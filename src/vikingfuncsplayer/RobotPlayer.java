@@ -45,7 +45,7 @@ public strictfp class RobotPlayer {
                             MapLocation flagLoc = flag.getLocation();
                             if(rc.canPickupFlag(flagLoc)){
                                 type = 4;
-                                // System.out.println("I am a bulder.");
+                                System.out.println("I am a bulder.");
                             }
                             else {
                                 type = rc.getID() % 3;
