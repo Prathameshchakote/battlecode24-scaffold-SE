@@ -12,8 +12,9 @@ import java.util.Set;
 
 public strictfp class RobotPlayer {
 
-    static final Random rng = new Random(6147);
+    static final Random rng = new Random();
     public static Random random = null;
+    public static int drop = 0;
 
     static final Direction[] directions = {
         Direction.NORTH,
@@ -38,9 +39,19 @@ public strictfp class RobotPlayer {
                 /* testing to see if duck has been spawned */
                 if(spawned == 0){
                     trySpawn(rc);
-                    if(rc.isSpawned()) {
+                    if(rc.isSpawned() ) {
                         spawned = 1;
-                        type = rc.getID() % 3;
+                        FlagInfo[] flags = rc.senseNearbyFlags(-1);
+                        for(FlagInfo flag : flags) {
+                            MapLocation flagLoc = flag.getLocation();
+                            if(rc.canPickupFlag(flagLoc)){
+                                type = 4;
+                                System.out.println("I am a bulder.");
+                            }
+                            else {
+                                type = rc.getID() % 3;
+                            }
+                        }
                     }
                 }
                 /* logic for the spawned duck based on type and round */
@@ -49,12 +60,19 @@ public strictfp class RobotPlayer {
                     round = rc.getRoundNum();
                     
                     if(round <= GameConstants.SETUP_ROUNDS) {
+                        if(type == 4){
+                            BuilderSetup.runSetup(rc);
+                        }
                         if(type == 0 || type == 1){
                             AttackSetup.runSetup(rc);
                         } else{
                             HealerSetup.runSetup(rc);
                         }
                     } else {
+                        /* Builder Duck */
+                        if(type == 4){
+                            BuilderMain.runMain(rc);
+                        }
                         /* Attack Duck */
                         if(type == 0 || type == 1){
                             AttackMainPhase.attackPhase(rc);
@@ -73,10 +91,21 @@ public strictfp class RobotPlayer {
 
     private static void trySpawn(RobotController rc) throws GameActionException {
         MapLocation[] locations = rc.getAllySpawnLocations();
-        for(MapLocation loc : locations) {
-            if(rc.canSpawn(loc)) {
-                rc.spawn(loc);
-                break;
+        int a = random.nextInt(2);
+        if(a == 1){
+            for(MapLocation loc : locations) {
+                if(rc.canSpawn(loc)) {
+                    rc.spawn(loc);
+                    break;
+                }
+            }
+        }
+        else{
+            for(int x=locations.length-1; x >=0; x--) {
+                if(rc.canSpawn(locations[x])) {
+                    rc.spawn(locations[x]);
+                    break;
+                }
             }
         }
     }
