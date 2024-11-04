@@ -25,6 +25,7 @@ public class AttackMainPhase {
         Direction dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
         MapLocation nextLoc;
         MapLocation[] spawnLocs = rc.getAllySpawnLocations();
+        boolean hordeMarch = false;
         
         //What team are we?
         Team ourTeam = rc.getTeam();
@@ -34,8 +35,10 @@ public class AttackMainPhase {
 
         //if near origin, start moving around the edge of the map.
 
-        if(rc.getLocation().isWithinDistanceSquared(origin, 4))
+        if(rc.getLocation().isWithinDistanceSquared(origin,  rng.nextInt(64 - 4 + 1) + 4)||hordeMarch)
         {
+            if(!hordeMarch)
+            hordeMarch = true;
             if(spawnLocs[0].x > spawnLocs[0].y)
                 dir = RobotPlayer.directions[0];
             else
@@ -111,8 +114,14 @@ public class AttackMainPhase {
                             rc.move(dir);
                             break;
                         }
-                    dir=RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
-                    
+                    if(!rc.sensePassability(nextLoc))
+                        dir=RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
+                    else{
+                        if(spawnLocs[0].x > spawnLocs[0].y)
+                            dir = RobotPlayer.directions[0];
+                        else
+                            dir= RobotPlayer.directions[4];
+                    }
                 }
             }
             
@@ -123,7 +132,10 @@ public class AttackMainPhase {
               
                     // Pick a random spawn location to attempt spawning in.
                     MapLocation randomLoc = spawnLocs[rng.nextInt(spawnLocs.length)];
-                    if (rc.canSpawn(randomLoc)) rc.spawn(randomLoc);
+                    if (rc.canSpawn(randomLoc))
+                    { rc.spawn(randomLoc);
+                        hordeMarch = false;
+                    }
         }
 
     }
