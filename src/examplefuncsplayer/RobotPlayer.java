@@ -30,7 +30,7 @@ public strictfp class RobotPlayer {
      * we get the same sequence of numbers every time this code is run. This is very useful for debugging!
      */
     static final Random rng = new Random(6147);
-
+    public static Random random = null;
     /** Array containing all the possible movement directions. */
     static final Direction[] directions = {
         Direction.NORTH,
@@ -71,6 +71,8 @@ public strictfp class RobotPlayer {
             try {
                 // Make sure you spawn your robot in before you attempt to take any actions!
                 // Robots not spawned in do not have vision of any tiles and cannot perform any actions.
+                if(random == null) random = new Random(rc.getID());
+
                 if (!rc.isSpawned()){
                     MapLocation[] spawnLocs = rc.getAllySpawnLocations();
                     // Pick a random spawn location to attempt spawning in.
@@ -78,6 +80,8 @@ public strictfp class RobotPlayer {
                     if (rc.canSpawn(randomLoc)) rc.spawn(randomLoc);
                 }
                 else{
+                    int round = rc.getRoundNum();
+                    if(round < GameConstants.SETUP_ROUNDS) Setup.runSetup(rc);
                     if (rc.canPickupFlag(rc.getLocation())){
                         rc.pickupFlag(rc.getLocation());
                         rc.setIndicatorString("Holding a flag!");
@@ -94,8 +98,36 @@ public strictfp class RobotPlayer {
                     // Move and attack randomly if no objective.
                     Direction dir = directions[rng.nextInt(directions.length)];
                     MapLocation nextLoc = rc.getLocation().add(dir);
-                    if (rc.canMove(dir)){
-                        rc.move(dir);
+                    //Check for if we're in the set up phase
+                    if (rc.getRoundNum() <= GameConstants.SETUP_ROUNDS)
+                    {  /* HERE WILL BE CODE FOR ATTACK DUCKS (ID % 3 = 0) */ 
+                        //check for nearby crumbs
+                        MapLocation[] crumbMap = rc.senseNearbyCrumbs(-1);
+                        //If there are crumbs, head to the nearest one
+                        if(crumbMap.length != 0)
+                        { 
+                            MapLocation firstCrumb = crumbMap[0];
+                            int checker = 1;
+                            //Check is crumb is available to be picked up through checking if the crumb location is fillable. 
+                            while(rc.canFill(firstCrumb))
+                            {
+                                if(crumbMap.length >= checker + 1)
+                                firstCrumb = crumbMap[checker];
+                                checker++;
+                            }
+                            //If crumb is available, head to it.
+                            if(!rc.canFill(firstCrumb))
+                            {
+                                dir = rc.getLocation().directionTo(firstCrumb);
+                                    if (rc.canMove(dir)){
+                                        rc.move(dir);
+                                    }
+                            }
+                        }
+                        //otherwise, move randomly until one is found.
+                                if (rc.canMove(dir)){
+                                    rc.move(dir);
+                                }
                     }
                     else if (rc.canAttack(nextLoc)){
                         rc.attack(nextLoc);
@@ -108,6 +140,7 @@ public strictfp class RobotPlayer {
                         rc.build(TrapType.EXPLOSIVE, prevLoc);
                     // We can also move our code into different methods or classes to better organize it!
                     updateEnemyRobots(rc);
+                    healNearbyFriend(rc);
                 }
 
             } catch (GameActionException e) {
@@ -148,6 +181,18 @@ public strictfp class RobotPlayer {
             if (rc.canWriteSharedArray(0, enemyRobots.length)){
                 rc.writeSharedArray(0, enemyRobots.length);
                 int numEnemies = rc.readSharedArray(0);
+            }
+        }
+    }
+
+    public static void healNearbyFriend (RobotController rc) throws GameActionException {
+        RobotInfo[] nearbyFriends = rc.senseNearbyRobots(2, rc.getTeam());
+        for (RobotInfo friend : nearbyFriends) {
+            if (friend.health < 1000 && rc.canHeal(friend.getLocation())) {
+                rc.heal(friend.getLocation());
+                System.out.println("Healed a friendly unit!");
+                rc.setIndicatorString("Healing: " + friend.getLocation());
+                break; // Heal only one unit per turn
             }
         }
     }
