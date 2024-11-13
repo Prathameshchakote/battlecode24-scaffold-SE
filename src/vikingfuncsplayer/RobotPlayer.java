@@ -37,7 +37,7 @@ public strictfp class RobotPlayer {
                 /* sets up random */
                 if(random == null) random = new Random(rc.getID());
                 /* testing to see if duck has been spawned */
-                if(spawned == 0){
+                if(spawned == 0||rc.isSpawned()== false){
                     trySpawn(rc);
                     if(rc.isSpawned() ) {
                         spawned = 1;
