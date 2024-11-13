@@ -4,7 +4,7 @@ import battlecode.common.*;
 
 public class BuilderSetup {
 
-    private static final int EXPLORE_ROUNDS = 100;
+    private static final int EXPLORE_ROUNDS = 125;
 
     public static void runSetup(RobotController rc) throws GameActionException {
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
