@@ -94,7 +94,6 @@ public class AttackMainPhase {
             System.out.println("Take that! Damaged an enemy that was in our way!");
         }
           //otherwise, we BEGIN THE HORDE RUSH, first filling if needed.
-            nextLoc = rc.getLocation().add(dir);
             if(rc.canFill(nextLoc)){
                 rc.fill(nextLoc);
             }
@@ -105,7 +104,7 @@ public class AttackMainPhase {
             else{
                 for(int i=0; i<8;i++)
                 {
-                    nextLoc = rc.getLocation().add(dir);
+                    
                     if(rc.canFill(nextLoc)){
                         rc.fill(nextLoc);
                     }
@@ -114,13 +113,19 @@ public class AttackMainPhase {
                             rc.move(dir);
                             break;
                         }
-                    if(!rc.sensePassability(nextLoc))
+                    if( rc.senseRobotAtLocation(nextLoc) != null)
                         dir=RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
                     else{
                         if(spawnLocs[0].x > spawnLocs[0].y)
+                        {
                             dir = RobotPlayer.directions[0];
+                            nextLoc = rc.getLocation().add(dir);
+                        }
                         else
+                         {
                             dir= RobotPlayer.directions[4];
+                            nextLoc = rc.getLocation().add(dir);
+                        }
                     }
                 }
             }

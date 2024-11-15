@@ -50,9 +50,9 @@ public class AttackSetup {
                     Pathfind.moveTowards(rc, firstCrumb, true);
                 }
                   //otherwise, move randomly until one is found.
-               Pathfind.moveTowards(rc, nextLoc, false);
+               
             }
-          
+            Pathfind.explore(rc);
         }
     }
     /* 
