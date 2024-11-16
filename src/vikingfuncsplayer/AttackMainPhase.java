@@ -104,6 +104,8 @@ public class AttackMainPhase {
             else{
                 for(int i=0; i<8;i++)
                 {
+                    if(rc.onTheMap(nextLoc)){
+
                     
                     if(rc.canFill(nextLoc)){
                         rc.fill(nextLoc);
@@ -113,8 +115,10 @@ public class AttackMainPhase {
                             rc.move(dir);
                             break;
                         }
+                        
                     if( rc.senseRobotAtLocation(nextLoc) != null)
                         dir=RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
+                    }
                     else{
                         if(spawnLocs[0].x > spawnLocs[0].y)
                         {
