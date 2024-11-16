@@ -5,6 +5,7 @@ import battlecode.common.*;
 public class BuilderSetup {
 
     private static final int EXPLORE_ROUNDS = 125;
+    private static Direction dir = Direction.NORTH;
 
     public static void runSetup(RobotController rc) throws GameActionException {
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
@@ -40,18 +41,28 @@ public class BuilderSetup {
             }
 
             if(targetFlag != null) {
-                Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
-                if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
-                    if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
-                        rc.build(TrapType.EXPLOSIVE, rc.getLocation());
-                    }
-                    else {
-                        MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
-                        if(rc.canDig(waterLoc)) rc.dig(waterLoc);
+                
+                if(rc.getLocation() == targetFlag.getLocation()){
+                    dir = RobotPlayer.directions[rc.getRoundNum() % 8];
+                    if(rc.canMove(dir)) {
+                        rc.move(dir);
+                    } else if(rc.canFill(rc.getLocation())) {
+                        rc.fill(rc.getLocation());
                     }
                 }
+                else{
+                    if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
+                        if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
+                            rc.build(TrapType.EXPLOSIVE, rc.getLocation());
+                        } 
+                        else if(rc.canFill(rc.getLocation().add(dir))) {
+                            rc.fill(rc.getLocation().add(dir));
+                        }
+                    }
+                    Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
+                }
             }
-            else Pathfind.explore(rc);
+                   
         }
     }
 }
