@@ -64,3 +64,24 @@ public class AttackSetupTest {
         verify(rc).canMove(any(Direction.class));
         verify(rc).move(any(Direction.class));
     }
+
+    @Test
+    public void testRunSetup_WithCrumbs_CanFill_HasMoreCrumbs() throws GameActionException {
+        // Setup
+        MapLocation crumbLocation1 = new MapLocation(1, 1);
+        MapLocation crumbLocation2 = new MapLocation(2, 2);
+        when(rc.getRoundNum()).thenReturn(GameConstants.SETUP_ROUNDS - 1);
+        when(rc.senseNearbyCrumbs(-1)).thenReturn(new MapLocation[]{crumbLocation1, crumbLocation2});
+        when(rc.canFill(crumbLocation1)).thenReturn(true);
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+
+        // Execute
+        AttackSetup.runSetup(rc);
+
+        // Verify
+        verify(rc).getRoundNum();
+        verify(rc).senseNearbyCrumbs(-1);
+        verify(rc).canFill(crumbLocation1);
+        verify(rc).canMove(any(Direction.class));
+        verify(rc).move(any(Direction.class));
+    }
