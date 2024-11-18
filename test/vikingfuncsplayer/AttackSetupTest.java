@@ -102,3 +102,20 @@ public class AttackSetupTest {
         verify(rc).canMove(any(Direction.class));
         verify(rc).move(any(Direction.class));
     }
+
+    @Test
+    public void testRunSetup_CannotMove() throws GameActionException {
+        // Setup
+        when(rc.getRoundNum()).thenReturn(GameConstants.SETUP_ROUNDS - 1);
+        when(rc.senseNearbyCrumbs(-1)).thenReturn(new MapLocation[]{});
+        when(rc.canMove(any(Direction.class))).thenReturn(false);
+
+        // Execute
+        AttackSetup.runSetup(rc);
+
+        // Verify
+        verify(rc).getRoundNum();
+        verify(rc).senseNearbyCrumbs(-1);
+        verify(rc).canMove(any(Direction.class));
+        verify(rc, never()).move(any(Direction.class));
+    }
