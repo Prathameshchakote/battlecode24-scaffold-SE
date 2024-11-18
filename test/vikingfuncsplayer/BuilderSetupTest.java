@@ -106,3 +106,17 @@ public class BuilderSetupTest {
         verify(rc).canDig(any(MapLocation.class));
         verify(rc, times(1)).dig(any(MapLocation.class));
     }
+
+    @Test
+    public void testRunSetup_LateGame_NoFlags_Explore() throws GameActionException {
+        // Setup - Late game with no flags around
+        when(rc.getRoundNum()).thenReturn(150);
+        when(rc.senseLegalStartingFlagPlacement(currentLocation)).thenReturn(false);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{});
+
+        // Execute
+        BuilderSetup.runSetup(rc);
+
+        // Verify exploration happens when no flags are nearby
+        verify(rc, atLeastOnce()).senseNearbyFlags(-1);
+    }
