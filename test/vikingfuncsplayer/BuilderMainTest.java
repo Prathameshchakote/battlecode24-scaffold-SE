@@ -37,3 +37,17 @@ public class BuilderMainTest {
         // Verify trap building attempt
         verify(rc).build(eq(TrapType.EXPLOSIVE), any(MapLocation.class));
     }
+
+    @Test
+    public void testRunMain_WithPickedUpFlag() throws GameActionException {
+        // Set up flag info for picked up flag
+        FlagInfo flag = mock(FlagInfo.class);
+        when(flag.isPickedUp()).thenReturn(true);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{flag});
+
+        // Execute
+        BuilderMain.runMain(rc);
+
+        // Verify exploration behavior
+        verify(rc).isMovementReady();
+    }
