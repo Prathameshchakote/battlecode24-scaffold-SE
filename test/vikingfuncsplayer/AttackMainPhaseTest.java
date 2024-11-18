@@ -103,3 +103,16 @@ public class AttackMainPhaseTest {
         verify(rc, atLeastOnce()).canFill(any(MapLocation.class));
         verify(rc, atLeastOnce()).fill(any(MapLocation.class));
     }
+
+    @Test
+    public void testRespawning() throws GameActionException {
+        // Setup respawning scenario
+        when(rc.getHealth()).thenReturn(0);
+        when(rc.canSpawn(any(MapLocation.class))).thenReturn(true);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc).getHealth();
+        verify(rc, atLeastOnce()).canSpawn(any(MapLocation.class));
+        verify(rc).spawn(any(MapLocation.class));
+    }
