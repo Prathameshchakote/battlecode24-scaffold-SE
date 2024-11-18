@@ -136,3 +136,18 @@ public class BuilderSetupTest {
         // Verify behavior when all flags are picked up
         verify(pickedUpFlag).isPickedUp();
     }
+
+    @Test
+    public void testRunSetup_LateGame_IllegalFlagPlacement() throws GameActionException {
+        // Setup - Late game with illegal flag placement
+        when(rc.getRoundNum()).thenReturn(150);
+        when(rc.senseLegalStartingFlagPlacement(currentLocation)).thenReturn(false);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{});
+
+        // Execute
+        BuilderSetup.runSetup(rc);
+
+        // Verify no flag drop attempted
+        verify(rc, never()).dropFlag(any(MapLocation.class));
+    }
+}
