@@ -89,3 +89,17 @@ public class AttackMainPhaseTest {
         verify(rc).canAttack(enemyLocation);
         verify(rc).attack(enemyLocation);
     }
+
+    @Test
+    public void testMovementWithObstacles() throws GameActionException {
+        // Setup movement with obstacles scenario
+        when(rc.canMove(any(Direction.class))).thenReturn(false);
+        when(rc.canFill(any(MapLocation.class))).thenReturn(true);
+        when(rc.sensePassability(any(MapLocation.class))).thenReturn(false);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc, atLeastOnce()).canMove(any(Direction.class));
+        verify(rc, atLeastOnce()).canFill(any(MapLocation.class));
+        verify(rc, atLeastOnce()).fill(any(MapLocation.class));
+    }
