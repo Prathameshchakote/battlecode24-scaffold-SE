@@ -75,3 +75,19 @@ public class PathfindTest {
         // Verify
         verify(rc, never()).fill(any(MapLocation.class));
     }
+
+    @Test
+    public void testExplore_WithCrumbs() throws GameActionException {
+        // Setup
+        MapLocation crumbLocation = new MapLocation(1, 1);
+        when(rc.isMovementReady()).thenReturn(true);
+        when(rc.senseNearbyCrumbs(-1)).thenReturn(new MapLocation[]{crumbLocation});
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+
+        // Execute
+        Pathfind.explore(rc);
+
+        // Verify
+        verify(rc).move(any(Direction.class));
+        verify(rc).senseNearbyCrumbs(-1);
+    }
