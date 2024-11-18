@@ -63,3 +63,23 @@ public class BuilderMainTest {
         // Verify exploration behavior
         verify(rc).isMovementReady();
     }
+
+    @Test
+    public void testRunMain_CannotBuildTrap() throws GameActionException {
+        // Set up flag info
+        MapLocation flagLocation = new MapLocation(11, 11);
+        FlagInfo flag = mock(FlagInfo.class);
+        when(flag.getLocation()).thenReturn(flagLocation);
+        when(flag.isPickedUp()).thenReturn(false);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{flag});
+
+        // Set up building conditions
+        when(rc.canBuild(any(TrapType.class), any(MapLocation.class))).thenReturn(false);
+        when(rc.canDig(any(MapLocation.class))).thenReturn(true);
+
+        // Execute
+        BuilderMain.runMain(rc);
+
+        // Verify digging attempt
+        verify(rc).dig(any(MapLocation.class));
+    }
