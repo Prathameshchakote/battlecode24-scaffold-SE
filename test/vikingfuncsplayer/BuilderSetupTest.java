@@ -120,3 +120,19 @@ public class BuilderSetupTest {
         // Verify exploration happens when no flags are nearby
         verify(rc, atLeastOnce()).senseNearbyFlags(-1);
     }
+
+    @Test
+    public void testRunSetup_LateGame_AllFlagsPickedUp() throws GameActionException {
+        // Setup - Late game with all flags picked up
+        when(rc.getRoundNum()).thenReturn(150);
+        when(rc.senseLegalStartingFlagPlacement(currentLocation)).thenReturn(false);
+        FlagInfo pickedUpFlag = mock(FlagInfo.class);
+        when(pickedUpFlag.isPickedUp()).thenReturn(true);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{pickedUpFlag});
+
+        // Execute
+        BuilderSetup.runSetup(rc);
+
+        // Verify behavior when all flags are picked up
+        verify(pickedUpFlag).isPickedUp();
+    }
