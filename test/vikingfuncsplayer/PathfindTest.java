@@ -48,3 +48,17 @@ public class PathfindTest {
         verify(rc, never()).move(any(Direction.class));
         verify(rc).fill(any(MapLocation.class));
     }
+
+    @Test
+    public void testMoveTowards_CannotMoveOrFill_MovesRandomly() throws GameActionException {
+        // Setup
+        MapLocation targetLocation = new MapLocation(1, 1);
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+        when(rc.canFill(any(MapLocation.class))).thenReturn(false);
+
+        // Execute
+        Pathfind.moveTowards(rc, targetLocation, true);
+
+        // Verify
+        verify(rc).move(any(Direction.class));
+    }
