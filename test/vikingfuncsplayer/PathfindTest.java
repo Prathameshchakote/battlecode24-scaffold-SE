@@ -105,3 +105,16 @@ public class PathfindTest {
         // Verify
         verify(rc).move(any(Direction.class));
     }
+
+    @Test
+    public void testExplore_MovementNotReady() throws GameActionException {
+        // Setup
+        when(rc.isMovementReady()).thenReturn(false);
+
+        // Execute
+        Pathfind.explore(rc);
+
+        // Verify
+        verify(rc, never()).move(any(Direction.class));
+        verify(rc, never()).senseNearbyCrumbs(-1);
+    }
