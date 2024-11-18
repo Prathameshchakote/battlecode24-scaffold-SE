@@ -66,3 +66,22 @@ public class BuilderSetupTest {
         // Verify flag drop attempt
         verify(rc).dropFlag(currentLocation);
     }
+
+    @Test
+    public void testRunSetup_LateGame_WithNearbyFlag_BuildExplosive() throws GameActionException {
+        // Setup - Late game near flag with ability to build trap
+        when(rc.getRoundNum()).thenReturn(150);
+        when(rc.senseLegalStartingFlagPlacement(currentLocation)).thenReturn(false);
+        FlagInfo statinaryFlag = mock(FlagInfo.class);
+        when(statinaryFlag.isPickedUp()).thenReturn(false);
+        when(statinaryFlag.getLocation()).thenReturn(new MapLocation(2, 2));
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{statinaryFlag});
+        when(rc.getLocation().distanceSquaredTo(any(MapLocation.class))).thenReturn(4);
+        when(rc.canBuild(TrapType.EXPLOSIVE, currentLocation)).thenReturn(true);
+
+        // Execute
+        BuilderSetup.runSetup(rc);
+
+        // Verify explosive trap building
+        verify(rc).build(TrapType.EXPLOSIVE, currentLocation);
+    }
