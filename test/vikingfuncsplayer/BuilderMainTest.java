@@ -104,3 +104,24 @@ public class BuilderMainTest {
         verify(rc).canBuild(eq(TrapType.EXPLOSIVE), any(MapLocation.class));
         verify(rc).canDig(any(MapLocation.class));
     }
+
+    @Test
+    public void testRunMain_FlagTooFar() throws GameActionException {
+        // Set up flag info far from current location
+        MapLocation flagLocation = new MapLocation(20, 20);
+        FlagInfo flag = mock(FlagInfo.class);
+        when(flag.getLocation()).thenReturn(flagLocation);
+        when(flag.isPickedUp()).thenReturn(false);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{flag});
+
+        // Set up distance check
+        when(rc.getLocation().distanceSquaredTo(flagLocation)).thenReturn(100);
+
+        // Execute
+        BuilderMain.runMain(rc);
+
+        // Verify no building attempts were made
+        verify(rc, never()).build(any(TrapType.class), any(MapLocation.class));
+        verify(rc, never()).dig(any(MapLocation.class));
+    }
+}
