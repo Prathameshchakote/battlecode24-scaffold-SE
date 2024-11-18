@@ -51,3 +51,18 @@ public class BuilderSetupTest {
         // Verify flag pickup attempt
         verify(rc).pickupFlag(mockFlag.getLocation());
     }
+
+    @Test
+    public void testRunSetup_LateGame_LegalFlagPlacement() throws GameActionException {
+        // Setup - Late game with legal flag placement
+        when(rc.getRoundNum()).thenReturn(150);
+        when(rc.senseLegalStartingFlagPlacement(currentLocation)).thenReturn(true);
+        when(rc.canDropFlag(currentLocation)).thenReturn(true);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{});
+
+        // Execute
+        BuilderSetup.runSetup(rc);
+
+        // Verify flag drop attempt
+        verify(rc).dropFlag(currentLocation);
+    }
