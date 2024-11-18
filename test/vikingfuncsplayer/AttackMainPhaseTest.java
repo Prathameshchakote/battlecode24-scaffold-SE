@@ -129,3 +129,18 @@ public class AttackMainPhaseTest {
         verify(rc, atLeastOnce()).canMove(any(Direction.class));
         verify(rc, atLeastOnce()).move(any(Direction.class));
     }
+
+    @Test
+    public void testHordeMarchBehavior() throws GameActionException {
+        // Setup horde march scenario
+        MapLocation nearOrigin = new MapLocation(2, 2);
+        when(rc.getLocation()).thenReturn(nearOrigin);
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc, atLeastOnce()).getLocation();
+        verify(rc, atLeastOnce()).canMove(any(Direction.class));
+        verify(rc, atLeastOnce()).move(any(Direction.class));
+    }
+}
