@@ -267,6 +267,11 @@ public  class MockRobotController implements RobotController {
     }
 
     @Override
+    public int getAttackDamage() {
+        return 0;
+    }
+
+    @Override
     public boolean canAttack(MapLocation loc) {
         return false;
     }
@@ -274,6 +279,11 @@ public  class MockRobotController implements RobotController {
     @Override
     public void attack(MapLocation loc) throws GameActionException {
 
+    }
+
+    @Override
+    public int getHealAmount() {
+        return 0;
     }
 
     @Override
@@ -334,6 +344,11 @@ public  class MockRobotController implements RobotController {
     @Override
     public void buyGlobal(GlobalUpgrade ug) throws GameActionException {
 
+    }
+
+    @Override
+    public GlobalUpgrade[] getGlobalUpgrades(Team team) {
+        return new GlobalUpgrade[0];
     }
 
     @Override
