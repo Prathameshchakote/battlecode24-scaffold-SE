@@ -38,4 +38,20 @@ public class AttackMainPhaseTest {
 //            e.printStackTrace();
 //        }
     }
-    
+
+    @Test
+    public void testFlagDefense() throws GameActionException {
+        // Setup flag defense scenario
+        MapLocation flagLocation = new MapLocation(11, 11);
+        FlagInfo pickedUpFlag = mock(FlagInfo.class);
+        when(pickedUpFlag.isPickedUp()).thenReturn(true);
+        when(pickedUpFlag.getLocation()).thenReturn(flagLocation);
+        when(rc.senseNearbyFlags(-1, myTeam)).thenReturn(new FlagInfo[]{pickedUpFlag});
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc).getTeam();
+        verify(rc).senseNearbyFlags(-1, myTeam);
+        verify(rc, atLeastOnce()).canMove(any(Direction.class));
+    }
