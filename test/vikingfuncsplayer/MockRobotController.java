@@ -199,3 +199,43 @@ public  class MockRobotController implements RobotController {
         return 0;
     }
 
+    @Override
+    public boolean isMovementReady() {
+        return false;
+    }
+
+    @Override
+    public int getMovementCooldownTurns() {
+        return 0;
+    }
+
+    @Override
+    public boolean canMove(Direction dir) {
+        return false;
+    }
+
+    @Override
+    public void move(Direction dir) throws GameActionException {
+
+    }
+
+    @Override
+    public MapLocation[] getAllySpawnLocations() {
+        return new MapLocation[0];
+    }
+
+    @Override
+    public boolean canSpawn(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void spawn(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canDig(MapLocation loc) {
+        return false;
+    }
+
