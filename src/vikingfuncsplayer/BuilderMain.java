@@ -3,6 +3,8 @@ package vikingfuncsplayer;
 import battlecode.common.*;
 
 public class BuilderMain {
+
+    private static Direction dir = Direction.NORTH;
     
     public static void runMain(RobotController rc) throws GameActionException {
 
@@ -18,19 +20,22 @@ public class BuilderMain {
         }
 
         if(targetFlag != null) {
-            Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
-            if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
-                if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
-                    rc.build(TrapType.EXPLOSIVE, rc.getLocation());
-                }
-                else {
-                    MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
-                    if(rc.canDig(waterLoc)) rc.dig(waterLoc);
+            if(rc.getLocation() == targetFlag.getLocation()){
+                dir = RobotPlayer.directions[rc.getRoundNum() % 8];
+                if(rc.canMove(dir)) {
+                    rc.move(dir);
+                } else if(rc.canFill(rc.getLocation())) {
+                    rc.fill(rc.getLocation());
                 }
             }
+            if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
+                MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
+                if(rc.canDig(waterLoc)) rc.dig(waterLoc);
+                Pathfind.moveTowards(rc, targetFlag.getLocation(), true);
+            } else{
+                Pathfind.moveTowards(rc, targetFlag.getLocation(), true);
+            }
+            
         }
-        else Pathfind.explore(rc);
-
     }
-
 }
