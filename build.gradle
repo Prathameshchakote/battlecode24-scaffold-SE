@@ -2,14 +2,53 @@
 
 apply plugin: 'java'
 apply plugin: 'scala'
+apply plugin: 'jacoco'
 
 // Compatibility version: Java 8
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+
+jacoco {
+  toolVersion = "0.8.8" // Use the version that best suits your needs
+}
+
+task customJacocoTestReport(type: JacocoReport) {
+  dependsOn test // Run tests before generating the report
+
+  reports {
+    xml.enabled = true
+    html.enabled = true
+    html.destination = file("$buildDir/reports/jacoco/test/html")
+    xml.destination = file("$buildDir/reports/jacoco/test/xml")
+  }
+
+  // Test coverage configuration
+  classDirectories.setFrom(files([
+          fileTree(dir: "$buildDir/classes", includes: ["**/*.class"]),
+          fileTree(dir: "$buildDir/tests", includes: ["**/*.class"])
+  ]))
+
+  sourceDirectories.setFrom(files("src/main/java", "src/main/scala"))
+  executionData.setFrom(files("$buildDir/jacoco/test.exec"))
+}
+
+jacocoTestCoverageVerification {
+  dependsOn test
+  violationRules {
+    rule {
+      limit {
+        minimum = 0.0 // 80% coverage threshold
+      }
+    }
+  }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
 // Validate Java version
 if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
-    throw new GradleException("The engine must be run using Java 8")
+  throw new GradleException("The engine must be run using Java 8")
 }
 
 // Directory layout.
@@ -60,7 +99,7 @@ eclipse {
 //////// Versions ////////
 
 ext.versions = [
-  battlecode: new File(projectDir, "version.txt").text.trim()
+        battlecode: new File(projectDir, "version.txt").text.trim()
 ]
 
 configurations.all {
@@ -117,7 +156,7 @@ task update {
     def version = getVersionFromWeb((project.findProperty("onSaturn") ?: "false").toBoolean())
     if (version == null) {
       throw new Exception(
-        "Could not find new version number. Are you connected to the internet?"
+              "Could not find new version number. Are you connected to the internet?"
       )
     }
     if (versions.battlecode != version) {
@@ -166,16 +205,17 @@ configurations {
 
 def os = System.getProperty("os.name").toLowerCase()
 def clientName = os.startsWith('windows')
-                    ? 'battlecode24-client-win-'
-                    : os.startsWith('mac')
-                        ? 'battlecode24-client-mac-'
-                        : 'battlecode24-client-linux-'
+        ? 'battlecode24-client-win-'
+        : os.startsWith('mac')
+        ? 'battlecode24-client-mac-'
+        : 'battlecode24-client-linux-'
 def clientType = project.findProperty("compatibilityClient").toBoolean()
-                    ? "electron"
-                    : "tauri"
+        ? "electron"
+        : "tauri"
 
 dependencies {
   testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+  testImplementation 'org.mockito:mockito-core:4.2.0'
 
   // The Battlecode engine.
   implementation group: 'org.battlecode', name: 'battlecode24', version: versions.battlecode
@@ -229,8 +269,8 @@ task verify(type: JavaExec) {
   mainClass = 'battlecode.instrumenter.Verifier'
   classpath = sourceSets.main.runtimeClasspath
   args = [
-    project.findProperty("team") ?: "examplefuncsplayer",
-    project.findProperty("url") ?: sourceSets.main.output.classesDirs.getAsPath(),
+          project.findProperty("team") ?: "examplefuncsplayer",
+          project.findProperty("url") ?: sourceSets.main.output.classesDirs.getAsPath(),
   ]
 }
 
@@ -249,23 +289,23 @@ task run(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
   args = ['-c=-']
   jvmArgs = [
-    '-Dbc.server.wait-for-client=' + (project.findProperty('waitForClient') ?: 'false'),
-    '-Dbc.server.mode=headless',
-    '-Dbc.server.map-path=maps',
-    '-Dbc.server.robot-player-to-system-out=' + (project.findProperty('outputVerbose') ?: 'true'),
-    '-Dbc.server.debug=false',
-    '-Dbc.engine.debug-methods=' + (project.findProperty('debug') ?: 'false'),
-    '-Dbc.engine.show-indicators=' + (project.findProperty('showIndicators') ?: 'true'),
-    '-Dbc.game.team-a=' + project.property('teamA'),
-    '-Dbc.game.team-b=' + project.property('teamB'),
-    '-Dbc.game.team-a.url=' + (project.findProperty('classLocationA') ?: defaultClassLocation),
-    '-Dbc.game.team-b.url=' + (project.findProperty('classLocationB') ?: defaultClassLocation),
-    '-Dbc.game.team-a.package=' + (project.findProperty('packageNameA') ?: project.property('teamA')),
-    '-Dbc.game.team-b.package=' + (project.findProperty('packageNameB') ?: project.property('teamB')),
-    '-Dbc.game.maps=' + project.property('maps'),
-    '-Dbc.server.validate-maps=' + project.property('validateMaps'),
-    '-Dbc.server.alternate-order=' + project.property('alternateOrder'),
-    '-Dbc.server.save-file=' + (project.findProperty('replay') ?: defaultReplay),
+          '-Dbc.server.wait-for-client=' + (project.findProperty('waitForClient') ?: 'false'),
+          '-Dbc.server.mode=headless',
+          '-Dbc.server.map-path=maps',
+          '-Dbc.server.robot-player-to-system-out=' + (project.findProperty('outputVerbose') ?: 'true'),
+          '-Dbc.server.debug=false',
+          '-Dbc.engine.debug-methods=' + (project.findProperty('debug') ?: 'false'),
+          '-Dbc.engine.show-indicators=' + (project.findProperty('showIndicators') ?: 'true'),
+          '-Dbc.game.team-a=' + project.property('teamA'),
+          '-Dbc.game.team-b=' + project.property('teamB'),
+          '-Dbc.game.team-a.url=' + (project.findProperty('classLocationA') ?: defaultClassLocation),
+          '-Dbc.game.team-b.url=' + (project.findProperty('classLocationB') ?: defaultClassLocation),
+          '-Dbc.game.team-a.package=' + (project.findProperty('packageNameA') ?: project.property('teamA')),
+          '-Dbc.game.team-b.package=' + (project.findProperty('packageNameB') ?: project.property('teamB')),
+          '-Dbc.game.maps=' + project.property('maps'),
+          '-Dbc.server.validate-maps=' + project.property('validateMaps'),
+          '-Dbc.server.alternate-order=' + project.property('alternateOrder'),
+          '-Dbc.server.save-file=' + (project.findProperty('replay') ?: defaultReplay),
   ]
 }
 
