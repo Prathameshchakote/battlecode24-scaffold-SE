@@ -78,3 +78,43 @@ public  class MockRobotController implements RobotController {
     public boolean isLocationOccupied(MapLocation loc) throws GameActionException {
         return false;
     }
+
+    @Override
+    public boolean canSenseRobotAtLocation(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public RobotInfo senseRobotAtLocation(MapLocation loc) throws GameActionException {
+        return null;
+    }
+
+    @Override
+    public boolean canSenseRobot(int id) {
+        return false;
+    }
+
+    @Override
+    public RobotInfo senseRobot(int id) throws GameActionException {
+        return null;
+    }
+
+    @Override
+    public RobotInfo[] senseNearbyRobots() {
+        return new RobotInfo[0];
+    }
+
+    @Override
+    public RobotInfo[] senseNearbyRobots(int radiusSquared) throws GameActionException {
+        return new RobotInfo[0];
+    }
+
+    @Override
+    public RobotInfo[] senseNearbyRobots(int radiusSquared, Team team) throws GameActionException {
+        return new RobotInfo[0];
+    }
+
+    @Override
+    public RobotInfo[] senseNearbyRobots(MapLocation center, int radiusSquared, Team team) throws GameActionException {
+        return new RobotInfo[0];
+    }
