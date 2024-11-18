@@ -91,3 +91,17 @@ public class PathfindTest {
         verify(rc).move(any(Direction.class));
         verify(rc).senseNearbyCrumbs(-1);
     }
+
+    @Test
+    public void testExplore_NoCrumbs_CanMove() throws GameActionException {
+        // Setup
+        when(rc.isMovementReady()).thenReturn(true);
+        when(rc.senseNearbyCrumbs(-1)).thenReturn(new MapLocation[]{});
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+
+        // Execute
+        Pathfind.explore(rc);
+
+        // Verify
+        verify(rc).move(any(Direction.class));
+    }
