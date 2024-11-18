@@ -334,3 +334,42 @@ public  class MockRobotController implements RobotController {
 
     }
 
+
+
+
+    @Override
+    public boolean canBuyGlobal(GlobalUpgrade ug) {
+        return false;
+    }
+
+    @Override
+    public void buyGlobal(GlobalUpgrade ug) throws GameActionException {
+
+    }
+
+    @Override
+    public GlobalUpgrade[] getGlobalUpgrades(Team team) {
+        return new GlobalUpgrade[0];
+    }
+
+    @Override
+    public void resign() {
+
+    }
+
+    @Override
+    public void setIndicatorString(String string) {
+
+    }
+
+    @Override
+    public void setIndicatorDot(MapLocation loc, int red, int green, int blue) {
+
+    }
+
+    @Override
+    public void setIndicatorLine(MapLocation startLoc, MapLocation endLoc, int red, int green, int blue) {
+
+    }
+}
+
