@@ -55,3 +55,20 @@ public class AttackMainPhaseTest {
         verify(rc).senseNearbyFlags(-1, myTeam);
         verify(rc, atLeastOnce()).canMove(any(Direction.class));
     }
+
+    @Test
+    public void testFlagCapture() throws GameActionException {
+        // Setup flag capture scenario
+        MapLocation enemyFlagLocation = new MapLocation(12, 12);
+        FlagInfo enemyFlag = mock(FlagInfo.class);
+        when(enemyFlag.isPickedUp()).thenReturn(false);
+        when(enemyFlag.getLocation()).thenReturn(enemyFlagLocation);
+        when(rc.senseNearbyFlags(-1, enemyTeam)).thenReturn(new FlagInfo[]{enemyFlag});
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+        when(rc.canPickupFlag(any(MapLocation.class))).thenReturn(true);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc).senseNearbyFlags(-1, enemyTeam);
+        verify(rc).canPickupFlag(rc.getLocation());
+    }
