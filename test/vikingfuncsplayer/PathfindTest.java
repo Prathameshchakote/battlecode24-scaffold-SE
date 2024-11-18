@@ -62,3 +62,16 @@ public class PathfindTest {
         // Verify
         verify(rc).move(any(Direction.class));
     }
+
+    @Test
+    public void testMoveTowards_FillDisabled() throws GameActionException {
+        // Setup
+        MapLocation targetLocation = new MapLocation(1, 1);
+        when(rc.canMove(any(Direction.class))).thenReturn(false);
+
+        // Execute
+        Pathfind.moveTowards(rc, targetLocation, false);
+
+        // Verify
+        verify(rc, never()).fill(any(MapLocation.class));
+    }
