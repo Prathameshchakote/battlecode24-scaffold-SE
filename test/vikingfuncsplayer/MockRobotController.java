@@ -284,3 +284,53 @@ public  class MockRobotController implements RobotController {
         return 0;
     }
 
+    @Override
+    public boolean canHeal(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void heal(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean hasFlag() {
+        return false;
+    }
+
+    @Override
+    public boolean canPickupFlag(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void pickupFlag(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public boolean canDropFlag(MapLocation loc) {
+        return false;
+    }
+
+    @Override
+    public void dropFlag(MapLocation loc) throws GameActionException {
+
+    }
+
+    @Override
+    public int readSharedArray(int index) throws GameActionException {
+        return 0;
+    }
+
+    @Override
+    public boolean canWriteSharedArray(int index, int value) {
+        return false;
+    }
+
+    @Override
+    public void writeSharedArray(int index, int value) throws GameActionException {
+
+    }
+
