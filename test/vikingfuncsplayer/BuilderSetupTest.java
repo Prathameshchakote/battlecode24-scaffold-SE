@@ -35,3 +35,19 @@ public class BuilderSetupTest {
         verify(rc).senseNearbyFlags(-1);
         verifyNoInteractions(mockMapInfo);
     }
+
+    @Test
+    public void testRunSetup_EarlyGame_WithPickableFlag() throws GameActionException {
+        // Setup - Early game with pickable flag
+        when(rc.getRoundNum()).thenReturn(50);
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{mockFlag});
+        when(rc.senseMapInfo(any(MapLocation.class))).thenReturn(mockMapInfo);
+        when(mockMapInfo.isSpawnZone()).thenReturn(true);
+        when(rc.canPickupFlag(any(MapLocation.class))).thenReturn(true);
+
+        // Execute
+        BuilderSetup.runSetup(rc);
+
+        // Verify flag pickup attempt
+        verify(rc).pickupFlag(mockFlag.getLocation());
+    }
