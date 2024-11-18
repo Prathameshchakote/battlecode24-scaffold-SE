@@ -32,3 +32,19 @@ public class PathfindTest {
         verify(rc).move(any(Direction.class));
         verify(rc, never()).fill(any(MapLocation.class));
     }
+
+    @Test
+    public void testMoveTowards_CannotMoveButCanFill() throws GameActionException {
+        // Setup
+        MapLocation targetLocation = new MapLocation(1, 1);
+        MapLocation fillLocation = currentLocation.add(Direction.NORTHEAST);
+        when(rc.canMove(any(Direction.class))).thenReturn(false);
+        when(rc.canFill(fillLocation)).thenReturn(true);
+
+        // Execute
+        Pathfind.moveTowards(rc, targetLocation, true);
+
+        // Verify
+        verify(rc, never()).move(any(Direction.class));
+        verify(rc).fill(any(MapLocation.class));
+    }
