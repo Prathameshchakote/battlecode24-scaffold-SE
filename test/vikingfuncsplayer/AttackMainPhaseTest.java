@@ -72,3 +72,20 @@ public class AttackMainPhaseTest {
         verify(rc).senseNearbyFlags(-1, enemyTeam);
         verify(rc).canPickupFlag(rc.getLocation());
     }
+
+    @Test
+    public void testEnemyAttack() throws GameActionException {
+        // Setup enemy attack scenario
+        MapLocation enemyLocation = new MapLocation(11, 11);
+        RobotInfo enemy = mock(RobotInfo.class);
+        when(enemy.getLocation()).thenReturn(enemyLocation);
+        when(rc.senseNearbyRobots(2, enemyTeam)).thenReturn(new RobotInfo[]{enemy});
+        when(rc.canAttack(enemyLocation)).thenReturn(true);
+        when(rc.hasFlag()).thenReturn(false);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc).senseNearbyRobots(2, enemyTeam);
+        verify(rc).canAttack(enemyLocation);
+        verify(rc).attack(enemyLocation);
+    }
