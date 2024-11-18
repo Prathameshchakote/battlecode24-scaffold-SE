@@ -116,3 +116,16 @@ public class AttackMainPhaseTest {
         verify(rc, atLeastOnce()).canSpawn(any(MapLocation.class));
         verify(rc).spawn(any(MapLocation.class));
     }
+
+    @Test
+    public void testFlagReturn() throws GameActionException {
+        // Setup flag return scenario
+        when(rc.hasFlag()).thenReturn(true);
+        when(rc.canMove(any(Direction.class))).thenReturn(true);
+
+        AttackMainPhase.attackPhase(rc);
+
+        verify(rc).hasFlag();
+        verify(rc, atLeastOnce()).canMove(any(Direction.class));
+        verify(rc, atLeastOnce()).move(any(Direction.class));
+    }
