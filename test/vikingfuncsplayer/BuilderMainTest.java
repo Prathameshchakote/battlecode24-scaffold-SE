@@ -51,3 +51,15 @@ public class BuilderMainTest {
         // Verify exploration behavior
         verify(rc).isMovementReady();
     }
+
+    @Test
+    public void testRunMain_NoFlags() throws GameActionException {
+        // Set up empty flag array
+        when(rc.senseNearbyFlags(-1)).thenReturn(new FlagInfo[]{});
+
+        // Execute
+        BuilderMain.runMain(rc);
+
+        // Verify exploration behavior
+        verify(rc).isMovementReady();
+    }
