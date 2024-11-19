@@ -34,7 +34,7 @@ public class AttackMainPhase {
         dir = rc.getLocation().directionTo(origin);
 
         //if near origin, start moving around the edge of the map.
-
+        
         if(rc.getLocation().isWithinDistanceSquared(origin,  rng.nextInt(64 - 4 + 1) + 4)||hordeMarch)
         {
             if(!hordeMarch)
@@ -42,7 +42,7 @@ public class AttackMainPhase {
             if(spawnLocs[0].x > spawnLocs[0].y)
                 dir = RobotPlayer.directions[0];
             else
-                dir= RobotPlayer.directions[4];
+                dir= RobotPlayer.directions[2];
         }
         FlagInfo defenseSense[] = rc.senseNearbyFlags(-1,ourTeam);
         int defensecounter = 0;
@@ -53,19 +53,13 @@ public class AttackMainPhase {
 
         }
         //if theres a flag, go towards it ASAP
-        FlagInfo flagSense[] = rc.senseNearbyFlags(-1,ourTeam.opponent());
-        int counter  = 0; 
-        if(flagSense.length > counter)
-        {
-            if(!flagSense[counter].isPickedUp()){
-                //dir = rc.getLocation().directionTo(flagSense[counter].getLocation());
-                Pathfind.moveTowards(rc, flagSense[counter].getLocation(), true);
+        FlagInfo flagSense[] = rc.senseNearbyFlags(-1,rc.getTeam().opponent());
+            if(flagSense.length > 0 && !flagSense[0].isPickedUp()){
+                dir = rc.getLocation().directionTo(flagSense[0].getLocation());
+                /*System.out.println("Flag found! on the way at round");
+                System.out.println(rc.getRoundNum());*/
+                //Pathfind.moveTowards(rc, flagSense[0].getLocation(), true);
             }
-            else {
-                counter++;
-            }
-            
-        }
        
         
         if(rc.canPickupFlag(rc.getLocation()))
@@ -84,15 +78,17 @@ public class AttackMainPhase {
         {
             if(rc.canAttack(enemie.location) && !rc.hasFlag())
             rc.attack(enemie.location);
-            System.out.println("Take that! Damaged an enemy that was nearby!");
+           // System.out.println("Take that! Damaged an enemy that was nearby!");
         }
 
         //if an enemy is in our way, attack them.
         nextLoc = rc.getLocation().add(dir);
         if (rc.canAttack(nextLoc)&& !rc.hasFlag()){
             rc.attack(nextLoc);
-            System.out.println("Take that! Damaged an enemy that was in our way!");
+           // System.out.println("Take that! Damaged an enemy that was in our way!");
         }
+
+
           //otherwise, we BEGIN THE HORDE RUSH, first filling if needed.
             if(rc.canFill(nextLoc)){
                 rc.fill(nextLoc);
@@ -102,7 +98,7 @@ public class AttackMainPhase {
                     rc.move(dir);
             }
             else{
-                for(int i=0; i<8;i++)
+                for(int i=0; i<2;i++)
                 {
                     if(rc.onTheMap(nextLoc)){
 
@@ -116,8 +112,6 @@ public class AttackMainPhase {
                             break;
                         }
                         
-                    if( rc.senseRobotAtLocation(nextLoc) != null)
-                        dir=RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
                     }
                     else{
                         if(spawnLocs[0].x > spawnLocs[0].y)
@@ -127,13 +121,14 @@ public class AttackMainPhase {
                         }
                         else
                          {
-                            dir= RobotPlayer.directions[4];
+                            dir= RobotPlayer.directions[2];
                             nextLoc = rc.getLocation().add(dir);
                         }
                     }
                 }
             }
-            
+
+                    
 
         //if jailed, try respawning.
         if(rc.getHealth() == 0)
