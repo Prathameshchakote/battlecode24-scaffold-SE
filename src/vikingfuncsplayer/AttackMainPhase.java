@@ -52,20 +52,23 @@ public class AttackMainPhase {
                 dir = rc.getLocation().directionTo(defenseSense[defensecounter].getLocation());
 
         }
+        //if we find the flag, we yoink it!       
+        if(rc.canPickupFlag(rc.getLocation()))
+        {
+            System.out.println("found a flag under me!");
+            rc.pickupFlag(rc.getLocation());
+        }
         //if theres a flag, go towards it ASAP
         FlagInfo flagSense[] = rc.senseNearbyFlags(-1,rc.getTeam().opponent());
             if(flagSense.length > 0 && !flagSense[0].isPickedUp()){
                 dir = rc.getLocation().directionTo(flagSense[0].getLocation());
-                /*System.out.println("Flag found! on the way at round");
-                System.out.println(rc.getRoundNum());*/
+                //System.out.println("Flag found! on the way at round");
+                //System.out.println(rc.getRoundNum());
                 //Pathfind.moveTowards(rc, flagSense[0].getLocation(), true);
             }
        
         
-        if(rc.canPickupFlag(rc.getLocation()))
-        {
-            rc.pickupFlag(rc.getLocation());
-        }
+
         //if we have the flag, its time to GO HOME
         if (rc.hasFlag() && rc.getRoundNum() >= GameConstants.SETUP_ROUNDS){
             MapLocation firstLoc = spawnLocs[0];
@@ -112,18 +115,31 @@ public class AttackMainPhase {
                             break;
                         }
                         
+                    if( rc.senseRobotAtLocation(nextLoc) != null)
+                     {  
+                        if(spawnLocs[0].x > spawnLocs[0].y)
+                        {
+                            dir = RobotPlayer.directions[0];
+                            nextLoc = rc.getLocation().add(dir);
+                        }else
+                        {
+                           dir= RobotPlayer.directions[2];
+                           nextLoc = rc.getLocation().add(dir);
+                       }
+                        nextLoc = rc.getLocation().add(dir);
+                     }
                     }
                     else{
                         if(spawnLocs[0].x > spawnLocs[0].y)
                         {
                             dir = RobotPlayer.directions[0];
                             nextLoc = rc.getLocation().add(dir);
-                        }
-                        else
-                         {
-                            dir= RobotPlayer.directions[2];
-                            nextLoc = rc.getLocation().add(dir);
-                        }
+                        }else
+                        {
+                           dir= RobotPlayer.directions[2];
+                           nextLoc = rc.getLocation().add(dir);
+                       }
+                        
                     }
                 }
             }

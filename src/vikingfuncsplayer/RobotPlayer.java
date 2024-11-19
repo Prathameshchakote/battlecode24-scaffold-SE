@@ -32,7 +32,6 @@ public strictfp class RobotPlayer {
         int spawned = 0;
         int type = 0;
         int round = 0;
-        GlobalUpgrade attackUpgrade = GlobalUpgrade.ATTACK; 
         while(true){
             try{
                 /* sets up random */
@@ -81,10 +80,6 @@ public strictfp class RobotPlayer {
                         } else{
                             HealerSetup.runSetup(rc);
                         }
-                    }
-                    if(rc.canBuyGlobal(attackUpgrade))
-                    {
-                        rc.buyGlobal(attackUpgrade);
                     }
                 }
             } finally {
