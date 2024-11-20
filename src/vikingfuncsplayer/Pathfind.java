@@ -11,8 +11,9 @@ public class Pathfind {
 
     public static void moveTowards(RobotController rc, MapLocation loc, boolean fill) throws GameActionException {
         Direction dir = rc.getLocation().directionTo(loc);
-        if(rc.canMove(dir)) rc.move(dir);
-        else if(fill & rc.canFill(rc.getLocation().add(dir))) rc.fill(rc.getLocation().add(dir));
+        
+        if(fill & rc.canFill(rc.getLocation().add(dir))) rc.fill(rc.getLocation().add(dir));
+        else if(rc.canMove(dir)) rc.move(dir);
         else {
             Direction randDir = RobotPlayer.directions[RobotPlayer.random.nextInt(8)];
             if(rc.canMove(randDir)) rc.move(randDir);

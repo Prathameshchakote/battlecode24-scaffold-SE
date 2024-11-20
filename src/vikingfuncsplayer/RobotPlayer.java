@@ -26,6 +26,7 @@ public strictfp class RobotPlayer {
         Direction.WEST,
         Direction.NORTHWEST,
     };
+    public static boolean hordeMarch;
     
     public static void run(RobotController rc) throws GameActionException {
         /* initalizing varabiles */
@@ -46,6 +47,7 @@ public strictfp class RobotPlayer {
                     trySpawn(rc);
                     if(rc.isSpawned() ) {
                         spawned = 1;
+                        hordeMarch = false;
                         FlagInfo[] flags = rc.senseNearbyFlags(-1);
                         for(FlagInfo flag : flags) {
                             MapLocation flagLoc = flag.getLocation();

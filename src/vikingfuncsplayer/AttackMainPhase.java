@@ -25,7 +25,7 @@ public class AttackMainPhase {
         Direction dir = RobotPlayer.directions[RobotPlayer.rng.nextInt(RobotPlayer.directions.length)];
         MapLocation nextLoc;
         MapLocation[] spawnLocs = rc.getAllySpawnLocations();
-        boolean hordeMarch = false;
+        
         
         //What team are we?
         Team ourTeam = rc.getTeam();
@@ -35,10 +35,23 @@ public class AttackMainPhase {
 
         //if near origin, start moving around the edge of the map.
         
-        if(rc.getLocation().isWithinDistanceSquared(origin,  rng.nextInt(64 - 4 + 1) + 4)||hordeMarch)
+         //Make code to attack ducks in radius
+         RobotInfo enemies[] = rc.senseNearbyRobots(-1, ourTeam.opponent());
+         if (enemies.length > 0) 
+         {
+             // can I attack 'em?
+             RobotInfo closestTarget = getClosestRI(enemies,rc);
+ 
+             if (rc.canAttack(closestTarget.getLocation())) {
+                 rc.attack(closestTarget.getLocation());
+                 System.out.println("Attacked a nearby enemy!");
+             }
+         }
+
+        if(rc.getLocation().isWithinDistanceSquared(origin,  rng.nextInt(64 - 4 + 1) + 4)||RobotPlayer.hordeMarch)
         {
-            if(!hordeMarch)
-            hordeMarch = true;
+            if(!RobotPlayer.hordeMarch)
+            RobotPlayer.hordeMarch = true;
             if(spawnLocs[0].x > spawnLocs[0].y)
                 dir = RobotPlayer.directions[0];
             else
@@ -61,10 +74,10 @@ public class AttackMainPhase {
         //if theres a flag, go towards it ASAP
         FlagInfo flagSense[] = rc.senseNearbyFlags(-1,rc.getTeam().opponent());
             if(flagSense.length > 0 && !flagSense[0].isPickedUp()){
-                dir = rc.getLocation().directionTo(flagSense[0].getLocation());
+                //dir = rc.getLocation().directionTo(flagSense[0].getLocation());
                 //System.out.println("Flag found! on the way at round");
                 //System.out.println(rc.getRoundNum());
-                //Pathfind.moveTowards(rc, flagSense[0].getLocation(), true);
+                Pathfind.moveTowards(rc, flagSense[0].getLocation(), true);
             }
        
         
@@ -75,25 +88,15 @@ public class AttackMainPhase {
             dir = rc.getLocation().directionTo(firstLoc);
 
         }
-        //Make code to attack ducks in radius
-        RobotInfo enemies[] = rc.senseNearbyRobots(2, rc.getTeam().opponent());
-        for(RobotInfo enemie : enemies)
-        {
-            if(rc.canAttack(enemie.location) && !rc.hasFlag())
-            rc.attack(enemie.location);
-           // System.out.println("Take that! Damaged an enemy that was nearby!");
-        }
+       
 
         //if an enemy is in our way, attack them.
         nextLoc = rc.getLocation().add(dir);
-        if (rc.canAttack(nextLoc)&& !rc.hasFlag()){
-            rc.attack(nextLoc);
-           // System.out.println("Take that! Damaged an enemy that was in our way!");
-        }
+        
 
-
-          //otherwise, we BEGIN THE HORDE RUSH, first filling if needed.
-            if(rc.canFill(nextLoc)){
+        //otherwise, we BEGIN THE HORDE RUSH, first filling if needed.
+        Pathfind.moveTowards(rc, nextLoc, true);
+            /*if(rc.canFill(nextLoc)){
                 rc.fill(nextLoc);
             }
             
@@ -101,48 +104,50 @@ public class AttackMainPhase {
                     rc.move(dir);
             }
             else{
-                for(int i=0; i<2;i++)
+                for(int i=0; i<1;i++)
                 {
                     if(rc.onTheMap(nextLoc)){
 
                     
-                    if(rc.canFill(nextLoc)){
-                        rc.fill(nextLoc);
-                    }
-                    if(rc.canMove(dir))
-                        {
-                            rc.move(dir);
-                            break;
+                        if(rc.canFill(nextLoc)){
+                            rc.fill(nextLoc);
                         }
-                        
-                    if( rc.senseRobotAtLocation(nextLoc) != null)
-                     {  
-                        if(spawnLocs[0].x > spawnLocs[0].y)
-                        {
-                            dir = RobotPlayer.directions[0];
-                            nextLoc = rc.getLocation().add(dir);
-                        }else
-                        {
-                           dir= RobotPlayer.directions[2];
-                           nextLoc = rc.getLocation().add(dir);
-                       }
-                        nextLoc = rc.getLocation().add(dir);
-                     }
+                        if(rc.canMove(dir))
+                            {
+                                rc.move(dir);
+                                break;
+                            }
+                            
+
+                            if(spawnLocs[0].x > spawnLocs[0].y)
+                                {
+                                    dir = dir.rotateRight();
+                                    nextLoc = rc.getLocation().add(dir);
+                                    if(rc.canSenseRobotAtLocation(nextLoc))
+                                    {
+                                        dir =dir.rotateRight();
+                                        nextLoc = rc.getLocation().add(dir);
+                                    }
+                                }
+                            else
+                                {
+                                dir= dir.rotateLeft();
+                                nextLoc = rc.getLocation().add(dir);     
+                                if(rc.canSenseRobotAtLocation(nextLoc))
+                                {
+                                    dir =dir.rotateLeft();
+                                    nextLoc = rc.getLocation().add(dir);
+                                }
+                                }
+    
                     }
                     else{
-                        if(spawnLocs[0].x > spawnLocs[0].y)
-                        {
-                            dir = RobotPlayer.directions[0];
-                            nextLoc = rc.getLocation().add(dir);
-                        }else
-                        {
-                           dir= RobotPlayer.directions[2];
-                           nextLoc = rc.getLocation().add(dir);
-                       }
-                        
+                        dir = dir.rotateLeft();
+                        nextLoc = rc.getLocation().add(dir);
                     }
+                    
                 }
-            }
+            }*/
 
                     
 
@@ -154,9 +159,19 @@ public class AttackMainPhase {
                     MapLocation randomLoc = spawnLocs[rng.nextInt(spawnLocs.length)];
                     if (rc.canSpawn(randomLoc))
                     { rc.spawn(randomLoc);
-                        hordeMarch = false;
+                        RobotPlayer.hordeMarch = false;
                     }
         }
 
+    }
+    public static RobotInfo getClosestRI(RobotInfo[] robots, RobotController rc) {
+        MapLocation myLocation = rc.getLocation();
+        RobotInfo draft = robots[0];
+        for (RobotInfo r : robots) {
+            if (r.getLocation().distanceSquaredTo(myLocation) < draft.getLocation().distanceSquaredTo(myLocation)) {
+                draft = r;
+            }
+        }
+        return draft;
     }
 }
