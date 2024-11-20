@@ -40,7 +40,7 @@ public class AttackMainPhase {
          if (enemies.length > 0) 
          {
              // can I attack 'em?
-             RobotInfo closestTarget = getClosestRI(enemies,rc);
+             RobotInfo closestTarget = getClosestRobot(enemies,rc);
  
              if (rc.canAttack(closestTarget.getLocation())) {
                  rc.attack(closestTarget.getLocation());
@@ -164,7 +164,7 @@ public class AttackMainPhase {
         }
 
     }
-    public static RobotInfo getClosestRI(RobotInfo[] robots, RobotController rc) {
+    public static RobotInfo getClosestRobot(RobotInfo[] robots, RobotController rc) {
         MapLocation myLocation = rc.getLocation();
         RobotInfo draft = robots[0];
         for (RobotInfo r : robots) {
