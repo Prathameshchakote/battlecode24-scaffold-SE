@@ -32,6 +32,11 @@ public strictfp class RobotPlayer {
         int spawned = 0;
         int type = 0;
         int round = 0;
+        if (round == 600 || round == 1200|| round == 1800) {
+            if (rc.canBuyGlobal(GlobalUpgrade.ATTACK)) {
+                rc.buyGlobal(GlobalUpgrade.ATTACK);
+            }
+        }
         while(true){
             try{
                 /* sets up random */
