@@ -42,7 +42,7 @@ public class BuilderSetup {
             }
 
             if(targetFlag != null) {
-                
+                //if on flag, move away from flag
                 if(rc.getLocation() == targetFlag.getLocation()){
                     dir = RobotPlayer.directions[rc.getRoundNum() % 8];
                     if(rc.canMove(dir)) {
@@ -51,6 +51,7 @@ public class BuilderSetup {
                         rc.fill(rc.getLocation());
                     }
                 }
+                // place an explosive trap if not on the flag
                 else{
                     if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
                         if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
