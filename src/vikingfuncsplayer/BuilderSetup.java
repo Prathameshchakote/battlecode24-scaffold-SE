@@ -3,10 +3,11 @@ package vikingfuncsplayer;
 import battlecode.common.*;
 
 public class BuilderSetup {
-
+    //controls when the builder duck sets down the flag
     private static final int EXPLORE_ROUNDS = 125;
+    
     private static Direction dir = Direction.NORTH;
-
+    
     public static void runSetup(RobotController rc) throws GameActionException {
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
             //pickup flag if possible, explore randomly
