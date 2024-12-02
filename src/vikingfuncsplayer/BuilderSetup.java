@@ -5,7 +5,7 @@ import battlecode.common.*;
 public class BuilderSetup {
     //controls when the builder duck sets down the flag
     private static final int EXPLORE_ROUNDS = 125;
-    
+    // default location to head towards when building defenses
     private static Direction dir = Direction.NORTH;
     
     public static void runSetup(RobotController rc) throws GameActionException {
