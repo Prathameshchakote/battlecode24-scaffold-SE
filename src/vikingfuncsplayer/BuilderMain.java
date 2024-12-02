@@ -28,6 +28,7 @@ public class BuilderMain {
                     rc.fill(rc.getLocation());
                 }
             }
+            // if far awat from flag, place down water defenses
             if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
                 MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
                 if(rc.canDig(waterLoc)) rc.dig(waterLoc);
