@@ -11,11 +11,11 @@ import java.util.Set;
 
 
 public strictfp class RobotPlayer {
-
+    //rng values for the class
     static final Random rng = new Random();
     public static Random random = null;
     public static int drop = 0;
-
+    // direction array for child classes
     static final Direction[] directions = {
         Direction.NORTH,
         Direction.NORTHEAST,
