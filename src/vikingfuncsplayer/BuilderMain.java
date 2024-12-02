@@ -3,7 +3,7 @@ package vikingfuncsplayer;
 import battlecode.common.*;
 
 public class BuilderMain {
-
+    //default direction to move
     private static Direction dir = Direction.NORTH;
     
     public static void runMain(RobotController rc) throws GameActionException {
