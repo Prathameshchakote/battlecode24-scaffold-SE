@@ -18,7 +18,7 @@ public class BuilderMain {
                 break;
             }
         }
-
+        // if on the flag, move away
         if(targetFlag != null) {
             if(rc.getLocation() == targetFlag.getLocation()){
                 dir = RobotPlayer.directions[rc.getRoundNum() % 8];
