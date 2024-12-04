@@ -3,10 +3,11 @@ package vikingfuncsplayer;
 import battlecode.common.*;
 
 public class BuilderSetup {
-
+    //controls when the builder duck sets down the flag
     private static final int EXPLORE_ROUNDS = 125;
+    // default location to head towards when building defenses
     private static Direction dir = Direction.NORTH;
-
+    
     public static void runSetup(RobotController rc) throws GameActionException {
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
             //pickup flag if possible, explore randomly
@@ -41,7 +42,7 @@ public class BuilderSetup {
             }
 
             if(targetFlag != null) {
-                
+                //if on flag, move away from flag
                 if(rc.getLocation() == targetFlag.getLocation()){
                     dir = RobotPlayer.directions[rc.getRoundNum() % 8];
                     if(rc.canMove(dir)) {
@@ -50,6 +51,7 @@ public class BuilderSetup {
                         rc.fill(rc.getLocation());
                     }
                 }
+                // place an explosive trap if not on the flag
                 else{
                     if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
                         if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {

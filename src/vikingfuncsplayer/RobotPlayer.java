@@ -11,11 +11,11 @@ import java.util.Set;
 
 
 public strictfp class RobotPlayer {
-
+    //rng values for the class
     static final Random rng = new Random();
     public static Random random = null;
     public static int drop = 0;
-
+    // direction array for child classes
     static final Direction[] directions = {
         Direction.NORTH,
         Direction.NORTHEAST,
@@ -42,7 +42,7 @@ public strictfp class RobotPlayer {
             try{
                 /* sets up random */
                 if(random == null) random = new Random(rc.getID());
-                /* testing to see if duck has been spawned */
+                /* testing to see if duck has been spawned or needs to be respawned */
                 if(spawned == 0||rc.isSpawned()== false){
                     trySpawn(rc);
                     if(rc.isSpawned() ) {

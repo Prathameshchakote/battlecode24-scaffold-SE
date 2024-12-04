@@ -3,7 +3,7 @@ package vikingfuncsplayer;
 import battlecode.common.*;
 
 public class BuilderMain {
-
+    //default direction to move
     private static Direction dir = Direction.NORTH;
     
     public static void runMain(RobotController rc) throws GameActionException {
@@ -18,7 +18,7 @@ public class BuilderMain {
                 break;
             }
         }
-
+        // if on the flag, move away
         if(targetFlag != null) {
             if(rc.getLocation() == targetFlag.getLocation()){
                 dir = RobotPlayer.directions[rc.getRoundNum() % 8];
@@ -28,6 +28,7 @@ public class BuilderMain {
                     rc.fill(rc.getLocation());
                 }
             }
+            // if far awat from flag, place down water defenses
             if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
                 MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
                 if(rc.canDig(waterLoc)) rc.dig(waterLoc);
